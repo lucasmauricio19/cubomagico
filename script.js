@@ -1,4 +1,3 @@
-// script.js
 const timerEl = document.getElementById('timer');
 const statusEl = document.getElementById('status');
 const inspectionEl = document.getElementById('inspection');
@@ -13,7 +12,6 @@ const themeToggle = document.getElementById('themeToggle');
 const newScrambleBtn = document.getElementById('newScramble');
 const clearAllBtn = document.getElementById('clearAll');
 const inspectionToggleBtn = document.getElementById('inspectionToggle');
-const timerCard = document.querySelector('.timer-card');
 
 let isRunning = false;
 let isPreparing = false;
@@ -26,11 +24,11 @@ let inspectionSeconds = 15;
 let inspectionInterval = null;
 let currentScramble = '';
 let solves = JSON.parse(localStorage.getItem('cubeTimerSolves') || '[]');
-let currentTheme = localStorage.getItem('cubeTimerTheme') || 'dark';
+let currentTheme = localStorage.getItem('cubeTimerTheme') || 'light';
 
 function applyTheme() {
-  document.body.classList.toggle('light', currentTheme === 'light');
-  themeToggle.textContent = currentTheme === 'light' ? '🌙 Tema escuro' : '☀️ Tema claro';
+  document.body.classList.toggle('dark', currentTheme === 'dark');
+  themeToggle.textContent = currentTheme === 'dark' ? 'Tema claro' : 'Tema escuro';
   localStorage.setItem('cubeTimerTheme', currentTheme);
 }
 
@@ -229,7 +227,7 @@ inspectionToggleBtn.addEventListener('click', () => {
 });
 
 themeToggle.addEventListener('click', () => {
-  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  currentTheme = currentTheme === 'light' ? 'dark' : 'light';
   applyTheme();
 });
 
@@ -264,26 +262,6 @@ document.addEventListener('keyup', (e) => {
 });
 
 window.addEventListener('blur', cancelArm);
-
-timerCard.addEventListener('pointerdown', (e) => {
-  e.preventDefault();
-
-  if (isRunning) {
-    stopTimer();
-    return;
-  }
-
-  armTimer();
-});
-
-timerCard.addEventListener('pointerup', (e) => {
-  e.preventDefault();
-  releaseTimer();
-});
-
-timerCard.addEventListener('pointerleave', () => {
-  if (!isRunning && !inspectionActive && isPreparing) cancelArm();
-});
 
 applyTheme();
 setNewScramble();
