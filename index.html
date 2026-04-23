@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CubeTimer</title>
+  <title>CubeTimer PRO</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,107 +12,104 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="bg-orb orb-1"></div>
-  <div class="bg-orb orb-2"></div>
-
   <div class="app-shell">
     <aside class="sidebar">
-      <div class="brand-card">
-        <div class="brand-icon">CT</div>
-        <div class="brand-text">
-          <h1>CubeTimer</h1>
-          <p>Professional Timer UI</p>
+      <div class="sidebar-top">
+        <div class="brand-card">
+          <div class="brand-icon">⬢</div>
+          <div class="brand-text">
+            <h1>CubeTimer <span>PRO</span></h1>
+          </div>
         </div>
+
+        <nav class="nav">
+          <button class="nav-item active" type="button">⏱ Cronômetro</button>
+          <button class="nav-item" type="button">🗓 Sessões</button>
+          <button class="nav-item" type="button">📊 Estatísticas</button>
+          <button class="nav-item" type="button">🔄 Scrambles</button>
+          <button class="nav-item" type="button">⚙ Configurações</button>
+        </nav>
       </div>
 
-      <nav class="nav">
-        <button class="nav-item active" type="button">Dashboard</button>
-        <button class="nav-item" type="button">Statistics</button>
-        <button class="nav-item" type="button">History</button>
-        <button class="nav-item" type="button">Session</button>
-      </nav>
+      <div class="sidebar-bottom">
+        <div class="side-panel">
+          <div class="session-line">
+            <span class="side-title">Sessão atual</span>
+            <span class="event-pill">3x3x3</span>
+          </div>
 
-      <div class="side-card">
-        <span class="side-label">Current event</span>
-        <strong>3x3 Cube</strong>
-      </div>
+          <div class="side-stats">
+            <div class="side-stat">
+              <span>solve</span>
+              <strong id="solveCount">0</strong>
+            </div>
+            <div class="side-stat">
+              <span>média</span>
+              <strong id="avgTime">--</strong>
+            </div>
+            <div class="side-stat">
+              <span>melhor</span>
+              <strong id="bestTime">--</strong>
+            </div>
+          </div>
+        </div>
 
-      <div class="side-card">
-        <span class="side-label">Best solve</span>
-        <strong id="bestTime">--</strong>
-      </div>
+        <div class="side-actions">
+          <button id="newScramble" class="side-btn primary-btn" type="button">✦ Novo scramble</button>
+          <button id="inspectionToggle" class="side-btn secondary-btn active" type="button">Inspeção: ON</button>
+          <button id="copyScramble" class="side-btn secondary-btn" type="button">⧉ Copiar scramble</button>
+          <button id="clearAll" class="side-btn danger-btn" type="button">🗑 Limpar solves</button>
+        </div>
 
-      <div class="side-card">
-        <span class="side-label">Average</span>
-        <strong id="avgTime">--</strong>
-      </div>
-
-      <div class="side-actions">
-        <button id="newScramble" class="btn btn-primary" type="button">New scramble</button>
-        <button id="inspectionToggle" class="btn btn-secondary active" type="button">Inspection: ON</button>
-        <button id="copyScramble" class="btn btn-secondary" type="button">Copy scramble</button>
-        <button id="clearAll" class="btn btn-danger" type="button">Clear solves</button>
+        <div class="sidebar-footer">
+          <div class="footer-icon">☀</div>
+          <div class="footer-icon">◎</div>
+          <div class="footer-icon">?</div>
+        </div>
       </div>
     </aside>
 
     <main class="main-content">
       <header class="topbar-card">
-        <div class="topbar-left">
-          <span class="mini-label">Current scramble</span>
-          <div id="scramble" class="scramble-text">R U R' U' F2 L D2 B' U2 R2</div>
+        <div class="event-select">🧊 3x3x3</div>
+
+        <div class="scramble-wrap">
+          <span class="scramble-label">Scramble atual</span>
+          <div id="scramble" class="scramble-text">L' B' U B' L U' L' U2 B2 R2 U' F2 U' B2 D B2 D2 L2 F2 B'</div>
         </div>
 
-        <div id="status" class="status-badge">Ready</div>
+        <button id="status" class="status-badge" type="button">Ready</button>
       </header>
 
       <section class="hero-panel">
-        <div class="hero-metrics">
-          <div class="metric-box">
-            <span>ao5</span>
-            <strong id="ao5">--</strong>
-          </div>
-
-          <div class="metric-box">
-            <span>ao12</span>
-            <strong id="ao12">--</strong>
-          </div>
-        </div>
-
         <div class="timer-zone" id="timerZone">
           <div id="inspection" class="inspection hidden">15</div>
-          <div id="timer" class="timer-display">00:00.000</div>
-          <p class="timer-hint">Hold <strong>Space</strong> and release to start</p>
+          <div id="timer" class="timer-display">42.93</div>
+
+          <div class="hero-inline-stats">
+            <div class="inline-stat blue-stat">
+              <span>ao5:</span>
+              <strong id="ao5">--</strong>
+            </div>
+
+            <div class="inline-divider"></div>
+
+            <div class="inline-stat purple-stat">
+              <span>ao12:</span>
+              <strong id="ao12">--</strong>
+            </div>
+          </div>
+
+          <div class="timer-control-pill">
+            Pressione <span>ESPAÇO</span> para iniciar/pausar
+          </div>
         </div>
       </section>
 
-      <section class="stats-strip">
-        <article class="info-card">
-          <span class="mini-label">Solves</span>
-          <strong id="solveCount">0</strong>
-        </article>
-
-        <article class="info-card">
-          <span class="mini-label">Last solve</span>
-          <strong id="lastTime">--</strong>
-        </article>
-
-        <article class="info-card">
-          <span class="mini-label">Inspection</span>
-          <strong id="inspectionState">Enabled</strong>
-        </article>
-      </section>
-
-      <section class="bottom-grid">
-        <article class="panel-box chart-panel">
-          <div class="panel-head">
-            <h2>Progress</h2>
-          </div>
-          <canvas id="chartCanvas"></canvas>
-        </article>
-
+      <section class="dashboard-grid">
         <article class="panel-box table-panel">
           <div class="panel-head">
-            <h2>Recent solves</h2>
+            <h2>Tempos</h2>
           </div>
 
           <div class="table-wrap">
@@ -120,18 +117,64 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Time</th>
-                  <th>Scramble</th>
+                  <th>tempo</th>
+                  <th>scramble</th>
                 </tr>
               </thead>
               <tbody id="historyTable"></tbody>
             </table>
           </div>
         </article>
+
+        <article class="panel-box chart-panel">
+          <div class="panel-head">
+            <h2>Evolução dos tempos</h2>
+          </div>
+          <canvas id="chartCanvas"></canvas>
+        </article>
+      </section>
+
+      <section class="bottom-cards">
+        <article class="mini-card">
+          <span>Melhor</span>
+          <strong id="lastTime">--</strong>
+        </article>
+
+        <article class="mini-card">
+          <span>Inspection</span>
+          <strong id="inspectionState">Enabled</strong>
+        </article>
+
+        <article class="mini-card">
+          <span>Ao5</span>
+          <strong id="bottomAo5Mirror">--</strong>
+        </article>
+
+        <article class="mini-card">
+          <span>Ao12</span>
+          <strong id="bottomAo12Mirror">--</strong>
+        </article>
       </section>
     </main>
   </div>
 
   <script src="script.js"></script>
+  <script>
+    const ao5Mirror = document.getElementById("bottomAo5Mirror");
+    const ao12Mirror = document.getElementById("bottomAo12Mirror");
+    const ao5Main = document.getElementById("ao5");
+    const ao12Main = document.getElementById("ao12");
+
+    const mirrorObserver = new MutationObserver(() => {
+      ao5Mirror.textContent = ao5Main.textContent || "--";
+      ao12Mirror.textContent = ao12Main.textContent || "--";
+    });
+
+    mirrorObserver.observe(ao5Main, { childList: true, subtree: true, characterData: true });
+    mirrorObserver.observe(ao12Main, { childList: true, subtree: true, characterData: true });
+
+    ao5Mirror.textContent = ao5Main.textContent || "--";
+    ao12Mirror.textContent = ao12Main.textContent || "--";
+  </script>
 </body>
 </html>
