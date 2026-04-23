@@ -107,7 +107,7 @@ function renderTable() {
   if (!solves.length) {
     historyTableEl.innerHTML = `
       <tr>
-        <td colspan="3" style="color:#8e9bb7;">No solves yet.</td>
+        <td colspan="3" style="color:#8e9bb7; padding:18px;">Nenhum solve ainda.</td>
       </tr>
     `;
     return;
@@ -126,7 +126,7 @@ function drawChart() {
   const ctx = chartCanvas.getContext("2d");
   const ratio = window.devicePixelRatio || 1;
   const width = chartCanvas.clientWidth;
-  const height = 240;
+  const height = 320;
 
   chartCanvas.width = width * ratio;
   chartCanvas.height = height * ratio;
@@ -138,54 +138,121 @@ function drawChart() {
   if (solves.length < 2) {
     ctx.fillStyle = "#8e9bb7";
     ctx.font = "14px Inter";
-    ctx.fillText("Add more solves to see progress.", 18, 30);
+    ctx.fillText("Adicione mais solves para ver a evolução.", 20, 30);
     return;
   }
 
   const values = solves.slice().reverse().map(s => s.time);
+
   const max = Math.max(...values);
   const min = Math.min(...values);
-  const padding = 24;
-  const graphWidth = width - padding * 2;
-  const graphHeight = height - padding * 2;
+
+  const paddingTop = 26;
+  const paddingRight = 20;
+  const paddingBottom = 28;
+  const paddingLeft = 20;
+
+  const graphWidth = width - paddingLeft - paddingRight;
+  const graphHeight = height - paddingTop - paddingBottom;
   const range = Math.max(max - min, 1);
 
   ctx.strokeStyle = "rgba(255,255,255,0.06)";
   ctx.lineWidth = 1;
 
-  for (let i = 0; i < 4; i++) {
-    const y = padding + (graphHeight / 3) * i;
+  const gridLines = 4;
+  for (let i = 0; i < gridLines; i++) {
+    const y = paddingTop + (graphHeight / (gridLines - 1)) * i;
     ctx.beginPath();
-    ctx.moveTo(padding, y);
-    ctx.lineTo(width - padding, y);
+    ctx.moveTo(paddingLeft, y);
+    ctx.lineTo(width - paddingRight, y);
     ctx.stroke();
   }
 
-  const gradient = ctx.createLinearGradient(0, 0, width, 0);
-  gradient.addColorStop(0, "#4f7cff");
-  gradient.addColorStop(1, "#8f5cff");
-
-  ctx.strokeStyle = gradient;
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-
-  values.forEach((value, index) => {
-    const x = padding + (graphWidth / (values.length - 1)) * index;
-    const y = padding + graphHeight - ((value - min) / range) * graphHeight;
-    if (index === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
+  const points = values.map((value, index) => {
+    const x = paddingLeft + (graphWidth / (values.length - 1)) * index;
+    const normalized = (value - min) / range;
+    const invertedY = paddingTop + graphHeight - (normalized * graphHeight);
+    return { x, y: invertedY, value };
   });
 
+  const fillGradient = ctx.createLinearGradient(0, paddingTop, 0, height);
+  fillGradient.addColorStop(0, "rgba(78,127,255,0.20)");
+  fillGradient.addColorStop(0.55, "rgba(141,93,255,0.10)");
+  fillGradient.addColorStop(1, "rgba(141,93,255,0.01)");
+
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1];
+    const curr = points[i];
+    const cx = (prev.x + curr.x) / 2;
+    ctx.bezierCurveTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
+  }
+
+  ctx.lineTo(points[points.length - 1].x, height - paddingBottom);
+  ctx.lineTo(points[0].x, height - paddingBottom);
+  ctx.closePath();
+  ctx.fillStyle = fillGradient;
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1];
+    const curr = points[i];
+    const cx = (prev.x + curr.x) / 2;
+    ctx.bezierCurveTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
+  }
+
+  ctx.strokeStyle = "rgba(104, 145, 255, 0.22)";
+  ctx.lineWidth = 8;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
   ctx.stroke();
 
-  values.forEach((value, index) => {
-    const x = padding + (graphWidth / (values.length - 1)) * index;
-    const y = padding + graphHeight - ((value - min) / range) * graphHeight;
-    ctx.fillStyle = "#dfe7ff";
+  const lineGradient = ctx.createLinearGradient(paddingLeft, 0, width - paddingRight, 0);
+  lineGradient.addColorStop(0, "#5b8cff");
+  lineGradient.addColorStop(1, "#a86fff");
+
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1];
+    const curr = points[i];
+    const cx = (prev.x + curr.x) / 2;
+    ctx.bezierCurveTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
+  }
+
+  ctx.strokeStyle = lineGradient;
+  ctx.lineWidth = 3.5;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.stroke();
+
+  points.forEach((point, index) => {
+    const isLast = index === points.length - 1;
+
     ctx.beginPath();
-    ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+    ctx.arc(point.x, point.y, isLast ? 5 : 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = isLast ? "#ffffff" : "#d8e2ff";
     ctx.fill();
+
+    if (isLast) {
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(104,145,255,0.16)";
+      ctx.fill();
+    }
   });
+
+  ctx.fillStyle = "#8e9bb7";
+  ctx.font = "12px Inter";
+  ctx.textAlign = "right";
+  ctx.fillText(formatTime(min), width - paddingRight, paddingTop - 6);
+  ctx.fillText(formatTime(max), width - paddingRight, height - 8);
 }
 
 function saveSolves() {
@@ -323,13 +390,13 @@ newScrambleBtn.addEventListener("click", setNewScramble);
 
 inspectionToggleBtn.addEventListener("click", () => {
   inspectionEnabled = !inspectionEnabled;
-  inspectionToggleBtn.textContent = `Inspection: ${inspectionEnabled ? "ON" : "OFF"}`;
+  inspectionToggleBtn.textContent = `Inspeção: ${inspectionEnabled ? "ON" : "OFF"}`;
   inspectionToggleBtn.classList.toggle("active", inspectionEnabled);
   inspectionStateEl.textContent = inspectionEnabled ? "Enabled" : "Disabled";
 });
 
 clearAllBtn.addEventListener("click", () => {
-  const ok = confirm("Do you really want to clear all solves?");
+  const ok = confirm("Deseja realmente apagar todos os solves?");
   if (!ok) return;
 
   solves = [];
@@ -342,14 +409,14 @@ clearAllBtn.addEventListener("click", () => {
 copyScrambleBtn.addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(currentScramble);
-    copyScrambleBtn.textContent = "Copied";
+    copyScrambleBtn.textContent = "Copiado";
     setTimeout(() => {
-      copyScrambleBtn.textContent = "Copy";
+      copyScrambleBtn.textContent = "⧉ Copiar scramble";
     }, 1200);
   } catch {
-    copyScrambleBtn.textContent = "Failed";
+    copyScrambleBtn.textContent = "Falhou";
     setTimeout(() => {
-      copyScrambleBtn.textContent = "Copy";
+      copyScrambleBtn.textContent = "⧉ Copiar scramble";
     }, 1200);
   }
 });
