@@ -171,7 +171,7 @@ function drawChart() {
     const normalized = (value - min) / range;
 
     // menor tempo sobe, maior tempo desce
-    const y = paddingTop + graphHeight - (normalized * graphHeight);
+    const y = paddingTop + (normalized * graphHeight);
 
     return { x, y, value };
   });
