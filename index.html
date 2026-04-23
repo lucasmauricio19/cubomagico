@@ -1,84 +1,84 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CubeTimer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+<title>CubeTimer Pro</title>
 
-  <link rel="stylesheet" href="style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
 </head>
 <body>
-  <div class="app">
-    <aside class="sidebar">
-      <div class="logo-box">
-        <h1>Cube<span>Timer</span></h1>
-        <p>sem anúncios</p>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h1>CubeTimer <span>PRO</span></h1>
+
+    <div class="menu">
+      <button>⏱ Cronômetro</button>
+      <button>📊 Estatísticas</button>
+      <button>⚙ Config</button>
+    </div>
+
+    <div class="session-box">
+      <p>sessão atual</p>
+      <h2>3x3x3</h2>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- SCRAMBLE -->
+    <div class="scramble-card">
+      <div class="top-row">
+        <span>Scramble atual</span>
+        <button onclick="novoScramble()">Novo</button>
+      </div>
+      <div id="scramble" class="scramble"></div>
+    </div>
+
+    <!-- TIMER -->
+    <div class="timer-area">
+      <div id="timer" class="timer">00.00</div>
+
+      <div class="stats">
+        <span id="ao5">ao5: --</span>
+        <span id="ao12">ao12: --</span>
       </div>
 
-      <div class="panel">
-        <h2>Estatísticas</h2>
-        <div class="stats-list">
-          <div class="stat-row">
-            <span>Melhor</span>
-            <strong id="bestTime">--</strong>
-          </div>
-          <div class="stat-row">
-            <span>Média</span>
-            <strong id="avgTime">--</strong>
-          </div>
-          <div class="stat-row">
-            <span>Ao5</span>
-            <strong id="ao5">--</strong>
-          </div>
-          <div class="stat-row">
-            <span>Ao12</span>
-            <strong id="ao12">--</strong>
-          </div>
-        </div>
+      <div class="hint">Pressione ESPAÇO</div>
+    </div>
+
+    <!-- TABLE + GRAPH -->
+    <div class="bottom">
+
+      <div class="table-box">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>tempo</th>
+              <th>ao5</th>
+              <th>ao12</th>
+            </tr>
+          </thead>
+          <tbody id="tabela"></tbody>
+        </table>
       </div>
 
-      <div class="panel controls-panel">
-        <h2>Controles</h2>
-        <div class="controls-buttons">
-          <button id="newScramble" class="btn primary-btn" type="button">Novo scramble</button>
-          <button id="inspectionToggle" class="btn secondary-btn active" type="button">Inspeção: ON</button>
-          <button id="themeToggle" class="btn secondary-btn" type="button">Tema</button>
-          <button id="clearAll" class="btn danger-btn" type="button">Limpar tempos</button>
-        </div>
-      </div>
+      <canvas id="grafico"></canvas>
 
-      <div class="panel history-panel">
-        <div class="history-top">
-          <h2>Histórico</h2>
-          <span id="countBadge" class="badge">0 solves</span>
-        </div>
-        <div id="history" class="history-list empty-state">
-          Nenhum tempo registrado ainda.
-        </div>
-      </div>
-    </aside>
+    </div>
 
-    <main class="main">
-      <div class="top-scramble">
-        <div class="scramble-label">Scramble atual</div>
-        <div id="scramble" class="scramble">R U R' U' F2 L D2 B' U2 R2</div>
-      </div>
+  </main>
 
-      <section class="timer-stage">
-        <div id="status" class="status">Pronto</div>
-        <div id="inspection" class="inspection hidden">15</div>
-        <div id="timer" class="timer">00:00.000</div>
-        <p class="hint">
-          Segure <strong>Espaço</strong> e solte para começar • toque e segure no celular
-        </p>
-      </section>
-    </main>
-  </div>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
