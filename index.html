@@ -1,84 +1,137 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CubeTimer UI</title>
 
-<title>CubeTimer Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-<div class="app">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <h1>CubeTimer <span>PRO</span></h1>
-
-    <div class="menu">
-      <button>⏱ Cronômetro</button>
-      <button>📊 Estatísticas</button>
-      <button>⚙ Config</button>
-    </div>
-
-    <div class="session-box">
-      <p>sessão atual</p>
-      <h2>3x3x3</h2>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main">
-
-    <!-- SCRAMBLE -->
-    <div class="scramble-card">
-      <div class="top-row">
-        <span>Scramble atual</span>
-        <button onclick="novoScramble()">Novo</button>
-      </div>
-      <div id="scramble" class="scramble"></div>
-    </div>
-
-    <!-- TIMER -->
-    <div class="timer-area">
-      <div id="timer" class="timer">00.00</div>
-
-      <div class="stats">
-        <span id="ao5">ao5: --</span>
-        <span id="ao12">ao12: --</span>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-card">
+        <div class="brand-mark">CT</div>
+        <div>
+          <h1>CubeTimer</h1>
+          <p>Professional session</p>
+        </div>
       </div>
 
-      <div class="hint">Pressione ESPAÇO</div>
-    </div>
+      <nav class="nav">
+        <button class="nav-item active" type="button">Timer</button>
+        <button class="nav-item" type="button">Stats</button>
+        <button class="nav-item" type="button">Session</button>
+        <button class="nav-item" type="button">Settings</button>
+      </nav>
 
-    <!-- TABLE + GRAPH -->
-    <div class="bottom">
-
-      <div class="table-box">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>tempo</th>
-              <th>ao5</th>
-              <th>ao12</th>
-            </tr>
-          </thead>
-          <tbody id="tabela"></tbody>
-        </table>
+      <div class="side-section">
+        <span class="side-label">Current event</span>
+        <strong>3x3 Cube</strong>
       </div>
 
-      <canvas id="grafico"></canvas>
+      <div class="side-section">
+        <span class="side-label">Session best</span>
+        <strong id="bestTime">--</strong>
+      </div>
 
-    </div>
+      <div class="side-section">
+        <span class="side-label">Session average</span>
+        <strong id="avgTime">--</strong>
+      </div>
 
-  </main>
+      <div class="side-actions">
+        <button id="newScramble" class="primary-btn" type="button">New scramble</button>
+        <button id="inspectionToggle" class="secondary-btn active" type="button">Inspection: ON</button>
+        <button id="clearAll" class="danger-btn" type="button">Clear solves</button>
+      </div>
+    </aside>
 
-</div>
+    <main class="main-content">
+      <header class="topbar-card">
+        <div>
+          <span class="mini-label">Current scramble</span>
+          <div id="scramble" class="scramble-text">R U R' U' F2 L D2 B' U2 R2</div>
+        </div>
 
-<script src="script.js"></script>
+        <div class="topbar-right">
+          <button id="copyScramble" class="icon-btn" type="button">Copy</button>
+        </div>
+      </header>
+
+      <section class="hero-panel">
+        <div class="hero-top">
+          <div id="status" class="status-badge">Ready</div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span>ao5</span>
+              <strong id="ao5">--</strong>
+            </div>
+            <div class="hero-stat">
+              <span>ao12</span>
+              <strong id="ao12">--</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="timer-zone" id="timerZone">
+          <div id="inspection" class="inspection hidden">15</div>
+          <div id="timer" class="timer-display">00:00.000</div>
+          <p class="timer-hint">Hold <strong>Space</strong> and release to start</p>
+        </div>
+      </section>
+
+      <section class="cards-row">
+        <article class="info-card">
+          <span class="mini-label">Solves</span>
+          <strong id="solveCount">0</strong>
+        </article>
+
+        <article class="info-card">
+          <span class="mini-label">Last solve</span>
+          <strong id="lastTime">--</strong>
+        </article>
+
+        <article class="info-card">
+          <span class="mini-label">Inspection</span>
+          <strong id="inspectionState">Enabled</strong>
+        </article>
+      </section>
+
+      <section class="bottom-grid">
+        <article class="panel-box chart-panel">
+          <div class="panel-head">
+            <h2>Progress</h2>
+          </div>
+          <canvas id="chartCanvas"></canvas>
+        </article>
+
+        <article class="panel-box table-panel">
+          <div class="panel-head">
+            <h2>Recent solves</h2>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Time</th>
+                  <th>Scramble</th>
+                </tr>
+              </thead>
+              <tbody id="historyTable"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
