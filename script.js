@@ -49,7 +49,7 @@ function generateScramble(length = 20) {
     F: "z", B: "z"
   };
 
-  let scramble = [];
+  const scramble = [];
   let lastMove = null;
   let lastAxis = null;
 
@@ -126,7 +126,7 @@ function drawChart() {
   const ctx = chartCanvas.getContext("2d");
   const ratio = window.devicePixelRatio || 1;
   const width = chartCanvas.clientWidth;
-  const height = 320;
+  const height = 280;
 
   chartCanvas.width = width * ratio;
   chartCanvas.height = height * ratio;
@@ -138,19 +138,18 @@ function drawChart() {
   if (solves.length < 2) {
     ctx.fillStyle = "#8e9bb7";
     ctx.font = "14px Inter";
-    ctx.fillText("Adicione mais solves para ver a evolução.", 20, 30);
+    ctx.fillText("Adicione mais solves para ver o gráfico.", 20, 30);
     return;
   }
 
   const values = solves.slice().reverse().map(s => s.time);
-
   const max = Math.max(...values);
   const min = Math.min(...values);
 
-  const paddingTop = 26;
-  const paddingRight = 20;
-  const paddingBottom = 28;
-  const paddingLeft = 20;
+  const paddingTop = 20;
+  const paddingRight = 18;
+  const paddingBottom = 24;
+  const paddingLeft = 18;
 
   const graphWidth = width - paddingLeft - paddingRight;
   const graphHeight = height - paddingTop - paddingBottom;
@@ -159,9 +158,8 @@ function drawChart() {
   ctx.strokeStyle = "rgba(255,255,255,0.06)";
   ctx.lineWidth = 1;
 
-  const gridLines = 4;
-  for (let i = 0; i < gridLines; i++) {
-    const y = paddingTop + (graphHeight / (gridLines - 1)) * i;
+  for (let i = 0; i < 4; i++) {
+    const y = paddingTop + (graphHeight / 3) * i;
     ctx.beginPath();
     ctx.moveTo(paddingLeft, y);
     ctx.lineTo(width - paddingRight, y);
@@ -171,8 +169,11 @@ function drawChart() {
   const points = values.map((value, index) => {
     const x = paddingLeft + (graphWidth / (values.length - 1)) * index;
     const normalized = (value - min) / range;
-    const invertedY = paddingTop + graphHeight - (normalized * graphHeight);
-    return { x, y: invertedY, value };
+
+    // menor tempo sobe, maior tempo desce
+    const y = paddingTop + graphHeight - (normalized * graphHeight);
+
+    return { x, y, value };
   });
 
   const fillGradient = ctx.createLinearGradient(0, paddingTop, 0, height);
@@ -206,7 +207,7 @@ function drawChart() {
     ctx.bezierCurveTo(cx, prev.y, cx, curr.y, curr.x, curr.y);
   }
 
-  ctx.strokeStyle = "rgba(104, 145, 255, 0.22)";
+  ctx.strokeStyle = "rgba(104,145,255,0.22)";
   ctx.lineWidth = 8;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
@@ -247,12 +248,6 @@ function drawChart() {
       ctx.fill();
     }
   });
-
-  ctx.fillStyle = "#8e9bb7";
-  ctx.font = "12px Inter";
-  ctx.textAlign = "right";
-  ctx.fillText(formatTime(min), width - paddingRight, paddingTop - 6);
-  ctx.fillText(formatTime(max), width - paddingRight, height - 8);
 }
 
 function saveSolves() {
