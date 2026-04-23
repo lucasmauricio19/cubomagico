@@ -1,0 +1,94 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CubeTimer Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-bg"></div>
+
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Speedcubing Timer</p>
+      <h1>CubeTimer <span>Pro</span></h1>
+    </div>
+
+    <div class="top-actions">
+      <button id="themeToggle" class="ghost-btn" type="button">🌙 Tema</button>
+      <button id="clearAll" class="danger-btn" type="button">Limpar tempos</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="main-panel glass">
+      <div class="scramble-card">
+        <div class="scramble-top">
+          <div>
+            <p class="label">Scramble atual</p>
+            <div id="scramble" class="scramble">R U R' U' F2 L D2 B' U2 R2</div>
+          </div>
+          <button id="newScramble" class="primary-btn" type="button">Novo scramble</button>
+        </div>
+      </div>
+
+      <div class="mode-row">
+        <button id="inspectionToggle" class="chip active" type="button">Inspeção: ON</button>
+        <div class="hint">Segure <strong>Espaço</strong> e solte para começar</div>
+      </div>
+
+      <section class="timer-card">
+        <div id="status" class="status">Pronto</div>
+        <div id="inspection" class="inspection hidden">15</div>
+        <div id="timer" class="timer">00:00.000</div>
+        <p class="subtext">PC: segure e solte <strong>Espaço</strong>. Celular: toque e segure no timer.</p>
+      </section>
+    </section>
+
+    <aside class="sidebar">
+      <section class="stats-card glass">
+        <div class="section-title-row">
+          <h2>Estatísticas</h2>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span>Melhor</span>
+            <strong id="bestTime">--</strong>
+          </div>
+          <div class="stat-box">
+            <span>Média</span>
+            <strong id="avgTime">--</strong>
+          </div>
+          <div class="stat-box">
+            <span>Ao5</span>
+            <strong id="ao5">--</strong>
+          </div>
+          <div class="stat-box">
+            <span>Ao12</span>
+            <strong id="ao12">--</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="history-card glass">
+        <div class="section-title-row">
+          <h2>Histórico</h2>
+          <span id="countBadge" class="badge">0 solves</span>
+        </div>
+
+        <div id="history" class="history-list empty-state">
+          Nenhum tempo registrado ainda.
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
